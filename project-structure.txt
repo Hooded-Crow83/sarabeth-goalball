@@ -1,0 +1,93 @@
+TEAM SARABETH — GOALBALL FUNDRAISER
+Recommended Git repository layout (11ty / Eleventy + Netlify)
+==============================================================
+
+/
+├── src/
+│   ├── index.html              → becomes src/index.njk (or .html) as the 11ty template
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   └── script.js
+│   ├── images/
+│   │   ├── hero-sarabeth.jpg           (placeholder — replace with real photo)
+│   │   ├── sarabeth-profile.jpg        (placeholder — replace with real photo)
+│   │   ├── og-share-team-usa.jpg       (1200x630 social share image)
+│   │   └── favicon.svg
+│   ├── _includes/
+│   │   └── layouts/
+│   │       └── base.njk        (optional: extract <head> + header/footer into a shared layout)
+│   └── _data/
+│       └── site.json           (optional: site title, donate URL, social links as data)
+│
+├── .eleventy.js                 → Eleventy config (passthrough copy for css/js/images)
+├── package.json                 → build scripts + devDependencies (@11ty/eleventy)
+├── netlify.toml                 → build command + publish directory for Netlify
+├── .gitignore                   → node_modules, _site, .DS_Store, etc.
+└── README.md                    → setup + deploy instructions
+
+------------------------------------------------------------
+NOTES ON CONVERTING THE FOUR DELIVERED FILES INTO THIS LAYOUT
+------------------------------------------------------------
+
+1. index.html   → move into src/index.html (Eleventy can process plain .html,
+                   or rename to .njk if you want to use Nunjucks includes/layouts).
+2. styles.css   → move into src/css/styles.css (already referenced as /css/styles.css).
+3. script.js    → move into src/js/script.js (already referenced as /js/script.js).
+4. Add a src/images/ folder and drop in the real photos referenced by the
+   placeholders in index.html (hero image, Sarabeth's profile photo, team/
+   pride photos, and the Open Graph share image).
+
+------------------------------------------------------------
+MINIMAL .eleventy.js
+------------------------------------------------------------
+module.exports = function (eleventyConfig) {
+  eleventyConfig.addPassthroughCopy("src/css");
+  eleventyConfig.addPassthroughCopy("src/js");
+  eleventyConfig.addPassthroughCopy("src/images");
+
+  return {
+    dir: {
+      input: "src",
+      output: "_site"
+    }
+  };
+};
+
+------------------------------------------------------------
+MINIMAL package.json
+------------------------------------------------------------
+{
+  "name": "team-sarabeth-fundraiser",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  }
+}
+
+------------------------------------------------------------
+MINIMAL netlify.toml
+------------------------------------------------------------
+[build]
+  command = "npm run build"
+  publish = "_site"
+
+------------------------------------------------------------
+DEPLOY CHECKLIST
+------------------------------------------------------------
+[ ] Replace all image placeholders in src/images/ with real photos
+[ ] Replace the placeholder donation URL in index.html with the live
+    donation platform link (GoFundMe, team nonprofit, etc.)
+[ ] Update the canonical URL / Open Graph URL once the Netlify domain
+    (or custom domain) is known
+[ ] Confirm tax-deductibility language in the FAQ against the actual
+    fundraising platform being used
+[ ] Run a Lighthouse pass after real images are added (compress/resize
+    images and add explicit width/height or aspect-ratio to avoid
+    layout shift)
+[ ] Push to GitHub/GitLab and connect the repo to Netlify for
+    continuous deployment

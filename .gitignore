@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+.vscode
+.cache
+public
+
+# Optional
+dist/
+build/
+.env
